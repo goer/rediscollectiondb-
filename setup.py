@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='rediscollectiondb',
-    version='0.1.0',
+    version='0.1.2',
     author='Guruh Purnama',
     author_email='guruh@xgn.ai',
     description='A simple interface to manage collections in Redis.',

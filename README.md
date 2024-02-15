@@ -2,7 +2,7 @@
 # RedisCollectionDB
 
 ## Description
-RedisCollectionDB is a Python library that provides an easy-to-use interface for managing collections and their items within a Redis database. It allows for the addition and removal of collections and items, listing of current collections and items, and subscribes to changes in collections and items via Redis' publish/subscribe mechanism.
+RedisCollectionDB is a Python library that provides an easy-to-use interface for managing collections and items within a Redis database. It allows for the addition and removal of collections and items, listing of current collections and items, and subscribes to changes in collections and items via Redis' publish/subscribe mechanism.
 
 ## Installation
 Install RedisCollectionDB using pip:
@@ -40,12 +40,31 @@ db.remove_item('books', '1984')
 db.remove_collection('books')
 ```
 
+## Handling Events with Callbacks
+You can extend the `RedisDB` class to handle item and collection changes by overriding the `on_item_changed` and `on_collection_changed` methods. Here's an example:
+
+```python
+class MyRedisDB(RedisDB):
+    def on_item_changed(self, action, collection, item):
+        print(f"Custom handling for item: {item} in collection: {collection}, action: {action}")
+
+    def on_collection_changed(self, action, collection):
+        print(f"Custom handling for collection: {collection}, action: {action}")
+
+# Use the subclass with custom event handling
+db = MyRedisDB(db_name='myapp')
+
+# Now, adding or removing items and collections will trigger custom handling
+db.add_collection('movies')
+db.add_item('movies', 'Inception')
+```
+
 ## Example
-This example demonstrates adding a collection, adding items to it, and then listing and removing items and the collection.
+This example demonstrates adding a collection, adding items to it, and then listing and removing items and the collection, with custom event handling for changes.
 
 ```python
 if __name__ == '__main__':
-    db = RedisDB(db_name='myapp')
+    db = MyRedisDB(db_name='myapp')
 
     db.add_collection('books')
     db.add_item('books', 'The Great Gatsby')
